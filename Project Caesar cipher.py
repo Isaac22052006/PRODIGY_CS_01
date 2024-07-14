@@ -1,38 +1,40 @@
-def caesar_cipher_encrypt(text, shift):
-    encrypted_text = ""
-    for char in text:
-        if char.isalpha():
-            shift_amount = shift % 26
-            if char.islower():
-                new_char = chr((ord(char) - ord('a') + shift_amount) % 26 + ord('a'))
-            elif char.isupper():
-                new_char = chr((ord(char) - ord('A') + shift_amount) % 26 + ord('A'))
-            encrypted_text += new_char
+def caesar_cipher_encrypt(plaintext, shift):
+    ciphertext = ""
+    for char in plaintext:
+        if char.isalpha():  # check if the character is a letter
+            start = ord('a') if char.islower() else ord('A')
+            shifted_char = chr((ord(char) - start + shift) % 26 + start)
+            ciphertext += shifted_char
         else:
-            encrypted_text += char
-    return encrypted_text
+            ciphertext += char  # if the character is not a letter, append it unchanged
+    return ciphertext
 
-def caesar_cipher_decrypt(text, shift):
-    return caesar_cipher_encrypt(text, -shift)
+def caesar_cipher_decrypt(ciphertext, shift):
+    return caesar_cipher_encrypt(ciphertext, -shift)  # decryption is just shifting in the opposite direction
 
 def main():
+    print("Welcome to the Caesar Cipher encryption/decryption tool!")
     while True:
-        choice = input("Type 'encrypt' to encrypt a message, 'decrypt' to decrypt a message, or 'quit' to exit: ").lower()
-        if choice == 'quit':
-            break
-        elif choice not in ['encrypt', 'decrypt']:
-            print("Invalid choice. Please try again.")
+        choice = input("Do you want to encrypt (e) or decrypt (d) a message? (e/d): ").strip().lower()
+        
+        if choice not in ['e', 'd']:
+            print("Invalid choice. Please enter 'e' for encrypt or 'd' for decrypt.")
             continue
         
-        message = input("Enter your message: ")
-        shift = int(input("Enter the shift value: "))
+        message = input("Enter your message: ").strip()
+        shift = int(input("Enter the shift value (a positive integer): "))
         
-        if choice == 'encrypt':
-            result = caesar_cipher_encrypt(message, shift)
-        else:
-            result = caesar_cipher_decrypt(message, shift)
+        if choice == 'e':
+            encrypted_message = caesar_cipher_encrypt(message, shift)
+            print(f"Encrypted message: {encrypted_message}")
+        elif choice == 'd':
+            decrypted_message = caesar_cipher_decrypt(message, shift)
+            print(f"Decrypted message: {decrypted_message}")
         
-        print(f"The result is: {result}")
+        another = input("Do you want to encrypt/decrypt another message? (yes/no): ").strip().lower()
+        if another != 'yes':
+            print("Goodbye!")
+            break
 
 if __name__ == "__main__":
     main()
